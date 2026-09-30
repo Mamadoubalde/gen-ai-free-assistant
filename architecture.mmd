@@ -1,0 +1,29 @@
+flowchart TD
+    User(["👤 User"])
+    UI["Streamlit Chat UI\n(model selector)"]
+    APIGW["API Gateway\nREST endpoint /chat"]
+    Lambda["Lambda\nchat_handler"]
+    Bedrock{{"Amazon Bedrock\nConverse API"}}
+    Claude["Anthropic Claude"]
+    Titan["Amazon Titan"]
+    Nova["Amazon Nova"]
+    S3[("S3 bucket\nchat history")]
+    CW["CloudWatch\ncost + usage metrics"]
+    Budget["AWS Budget\nalarm @ $10/mo"]
+
+    User --> UI
+    UI -- "direct SDK calls\n(local demo)" --> Bedrock
+    UI -- "or via serverless API" --> APIGW
+    APIGW --> Lambda
+    Lambda --> Bedrock
+    Bedrock --> Claude
+    Bedrock --> Titan
+    Bedrock --> Nova
+    Lambda --> S3
+    Lambda -. "usage metrics" .-> CW
+    CW -. "forecast/actual spend" .-> Budget
+
+    classDef aws fill:#232f3e,stroke:#ff9900,color:#ffffff;
+    classDef model fill:#ff9900,stroke:#232f3e,color:#232f3e;
+    class APIGW,Lambda,S3,CW,Budget aws;
+    class Bedrock,Claude,Titan,Nova model;

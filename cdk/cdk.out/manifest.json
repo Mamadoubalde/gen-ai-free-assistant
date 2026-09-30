@@ -1,0 +1,221 @@
+{
+  "version": "38.0.1",
+  "artifacts": {
+    "GenAIDevStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "GenAIDevStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "GenAIDevStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://654654333266/us-east-1",
+      "properties": {
+        "templateFile": "GenAIDevStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::654654333266:role/cdk-hnb659fds-deploy-role-654654333266-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::654654333266:role/cdk-hnb659fds-cfn-exec-role-654654333266-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-654654333266-us-east-1/a0b69f509c2291cac0b118a7d2cd1a0b45489c775ae02088876c83bd34aca85c.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "GenAIDevStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::654654333266:role/cdk-hnb659fds-lookup-role-654654333266-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "GenAIDevStack.assets"
+      ],
+      "metadata": {
+        "/GenAIDevStack/ChatHistoryBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHistoryBucketAFDDB459"
+          }
+        ],
+        "/GenAIDevStack/ChatHistoryBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHistoryBucketPolicy5112441C"
+          }
+        ],
+        "/GenAIDevStack/ChatHistoryBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHistoryBucketAutoDeleteObjectsCustomResourceA5C62087"
+          }
+        ],
+        "/GenAIDevStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/GenAIDevStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/GenAIDevStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/GenAIDevStack/ChatHandlerRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHandlerRole2B7E098F"
+          }
+        ],
+        "/GenAIDevStack/ChatHandlerRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHandlerRoleDefaultPolicy1954B2A2"
+          }
+        ],
+        "/GenAIDevStack/ChatHandlerLogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHandlerLogGroup7CD9BA8C"
+          }
+        ],
+        "/GenAIDevStack/ChatHandlerFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHandlerFunctionE48F1BBB"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApiD29796E1"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/CloudWatchRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApiCloudWatchRole9963F83E"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/Account": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApiAccount35628D82"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApiDeploymentE71C0DD23bd320533618617add80e464dc927b19"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApiDeploymentStageprodE9C01931"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApiEndpoint467C6B40"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/Default/chat/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApichatFDA23F51"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/Default/chat/POST/ApiPermission.GenAIDevStackChatApi78D7F4CD.POST..chat": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApichatPOSTApiPermissionGenAIDevStackChatApi78D7F4CDPOSTchat29306F65"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/Default/chat/POST/ApiPermission.Test.GenAIDevStackChatApi78D7F4CD.POST..chat": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApichatPOSTApiPermissionTestGenAIDevStackChatApi78D7F4CDPOSTchat19E539D8"
+          }
+        ],
+        "/GenAIDevStack/ChatApi/Default/chat/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApichatPOST13AF4106"
+          }
+        ],
+        "/GenAIDevStack/GenAIDevUser/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GenAIDevUser8FD4C7C2"
+          }
+        ],
+        "/GenAIDevStack/GenAIDevUser/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GenAIDevUserDefaultPolicy50F41767"
+          }
+        ],
+        "/GenAIDevStack/MonthlyGenAIBudget": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonthlyGenAIBudget"
+          }
+        ],
+        "/GenAIDevStack/ChatApiUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatApiUrl"
+          }
+        ],
+        "/GenAIDevStack/ChatHistoryBucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChatHistoryBucketName"
+          }
+        ],
+        "/GenAIDevStack/GenAIDevUserName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GenAIDevUserName"
+          }
+        ],
+        "/GenAIDevStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/GenAIDevStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/GenAIDevStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "GenAIDevStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

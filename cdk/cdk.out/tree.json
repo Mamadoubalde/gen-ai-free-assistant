@@ -1,0 +1,1031 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "GenAIDevStack": {
+        "id": "GenAIDevStack",
+        "path": "GenAIDevStack",
+        "children": {
+          "ChatHistoryBucket": {
+            "id": "ChatHistoryBucket",
+            "path": "GenAIDevStack/ChatHistoryBucket",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GenAIDevStack/ChatHistoryBucket/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "bucketEncryption": {
+                      "serverSideEncryptionConfiguration": [
+                        {
+                          "serverSideEncryptionByDefault": {
+                            "sseAlgorithm": "AES256"
+                          }
+                        }
+                      ]
+                    },
+                    "lifecycleConfiguration": {
+                      "rules": [
+                        {
+                          "expirationInDays": 90,
+                          "id": "expire-old-chat-history",
+                          "status": "Enabled"
+                        }
+                      ]
+                    },
+                    "publicAccessBlockConfiguration": {
+                      "blockPublicAcls": true,
+                      "blockPublicPolicy": true,
+                      "ignorePublicAcls": true,
+                      "restrictPublicBuckets": true
+                    },
+                    "tags": [
+                      {
+                        "key": "aws-cdk:auto-delete-objects",
+                        "value": "true"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.170.0"
+                }
+              },
+              "Policy": {
+                "id": "Policy",
+                "path": "GenAIDevStack/ChatHistoryBucket/Policy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GenAIDevStack/ChatHistoryBucket/Policy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                      "aws:cdk:cloudformation:props": {
+                        "bucket": {
+                          "Ref": "ChatHistoryBucketAFDDB459"
+                        },
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "s3:DeleteObject*",
+                                "s3:GetBucket*",
+                                "s3:List*",
+                                "s3:PutBucketPolicy"
+                              ],
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::GetAtt": [
+                                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                                    "Arn"
+                                  ]
+                                }
+                              },
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "ChatHistoryBucketAFDDB459",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "ChatHistoryBucketAFDDB459",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                  "version": "2.170.0"
+                }
+              },
+              "AutoDeleteObjectsCustomResource": {
+                "id": "AutoDeleteObjectsCustomResource",
+                "path": "GenAIDevStack/ChatHistoryBucket/AutoDeleteObjectsCustomResource",
+                "children": {
+                  "Default": {
+                    "id": "Default",
+                    "path": "GenAIDevStack/ChatHistoryBucket/AutoDeleteObjectsCustomResource/Default",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CustomResource",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.170.0"
+            }
+          },
+          "Custom::S3AutoDeleteObjectsCustomResourceProvider": {
+            "id": "Custom::S3AutoDeleteObjectsCustomResourceProvider",
+            "path": "GenAIDevStack/Custom::S3AutoDeleteObjectsCustomResourceProvider",
+            "children": {
+              "Staging": {
+                "id": "Staging",
+                "path": "GenAIDevStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Staging",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.170.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "GenAIDevStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.170.0"
+                }
+              },
+              "Handler": {
+                "id": "Handler",
+                "path": "GenAIDevStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CustomResourceProviderBase",
+              "version": "2.170.0"
+            }
+          },
+          "ChatHandlerRole": {
+            "id": "ChatHandlerRole",
+            "path": "GenAIDevStack/ChatHandlerRole",
+            "children": {
+              "ImportChatHandlerRole": {
+                "id": "ImportChatHandlerRole",
+                "path": "GenAIDevStack/ChatHandlerRole/ImportChatHandlerRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.170.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "GenAIDevStack/ChatHandlerRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "lambda.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.170.0"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "GenAIDevStack/ChatHandlerRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GenAIDevStack/ChatHandlerRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "bedrock:Converse",
+                                "bedrock:ConverseStream",
+                                "bedrock:CountTokens",
+                                "bedrock:InvokeModel",
+                                "bedrock:InvokeModelWithResponseStream"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                "arn:aws:bedrock:*:*:inference-profile/*",
+                                "arn:aws:bedrock:*::foundation-model/*"
+                              ],
+                              "Sid": "BedrockInvoke"
+                            },
+                            {
+                              "Action": [
+                                "s3:Abort*",
+                                "s3:DeleteObject*",
+                                "s3:GetBucket*",
+                                "s3:GetObject*",
+                                "s3:List*",
+                                "s3:PutObject",
+                                "s3:PutObjectLegalHold",
+                                "s3:PutObjectRetention",
+                                "s3:PutObjectTagging",
+                                "s3:PutObjectVersionTagging"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "ChatHistoryBucketAFDDB459",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "ChatHistoryBucketAFDDB459",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "ChatHandlerRoleDefaultPolicy1954B2A2",
+                        "roles": [
+                          {
+                            "Ref": "ChatHandlerRole2B7E098F"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.170.0"
+            }
+          },
+          "ChatHandlerLogGroup": {
+            "id": "ChatHandlerLogGroup",
+            "path": "GenAIDevStack/ChatHandlerLogGroup",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GenAIDevStack/ChatHandlerLogGroup/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "logGroupName": "/aws/lambda/chat_handler",
+                    "retentionInDays": 7
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+              "version": "2.170.0"
+            }
+          },
+          "ChatHandlerFunction": {
+            "id": "ChatHandlerFunction",
+            "path": "GenAIDevStack/ChatHandlerFunction",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "GenAIDevStack/ChatHandlerFunction/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "GenAIDevStack/ChatHandlerFunction/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.170.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "GenAIDevStack/ChatHandlerFunction/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.170.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "GenAIDevStack/ChatHandlerFunction/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": "cdk-hnb659fds-assets-654654333266-us-east-1",
+                      "s3Key": "db1f8634d07ef860e911ecbec20805adc3cba72f3cf421d90a608967edfc9207.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "CHAT_HISTORY_BUCKET": {
+                          "Ref": "ChatHistoryBucketAFDDB459"
+                        },
+                        "DEFAULT_MODEL_ID": "amazon.nova-lite-v1:0",
+                        "POWERTOOLS_LOG_LEVEL": "INFO"
+                      }
+                    },
+                    "functionName": "chat_handler",
+                    "handler": "handler.lambda_handler",
+                    "loggingConfig": {
+                      "logGroup": {
+                        "Ref": "ChatHandlerLogGroup7CD9BA8C"
+                      }
+                    },
+                    "memorySize": 256,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "ChatHandlerRole2B7E098F",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.12",
+                    "timeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.170.0"
+            }
+          },
+          "ChatApi": {
+            "id": "ChatApi",
+            "path": "GenAIDevStack/ChatApi",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GenAIDevStack/ChatApi/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "ChatApi"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.CfnRestApi",
+                  "version": "2.170.0"
+                }
+              },
+              "CloudWatchRole": {
+                "id": "CloudWatchRole",
+                "path": "GenAIDevStack/ChatApi/CloudWatchRole",
+                "children": {
+                  "ImportCloudWatchRole": {
+                    "id": "ImportCloudWatchRole",
+                    "path": "GenAIDevStack/ChatApi/CloudWatchRole/ImportCloudWatchRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.170.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GenAIDevStack/ChatApi/CloudWatchRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "apigateway.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.170.0"
+                }
+              },
+              "Account": {
+                "id": "Account",
+                "path": "GenAIDevStack/ChatApi/Account",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
+                  "aws:cdk:cloudformation:props": {
+                    "cloudWatchRoleArn": {
+                      "Fn::GetAtt": [
+                        "ChatApiCloudWatchRole9963F83E",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.CfnAccount",
+                  "version": "2.170.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "GenAIDevStack/ChatApi/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GenAIDevStack/ChatApi/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "description": "Automatically created by the RestApi construct",
+                        "restApiId": {
+                          "Ref": "ChatApiD29796E1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnDeployment",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Deployment",
+                  "version": "2.170.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "GenAIDevStack/ChatApi/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GenAIDevStack/ChatApi/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "deploymentId": {
+                          "Ref": "ChatApiDeploymentE71C0DD23bd320533618617add80e464dc927b19"
+                        },
+                        "methodSettings": [
+                          {
+                            "httpMethod": "*",
+                            "resourcePath": "/*",
+                            "dataTraceEnabled": false,
+                            "throttlingBurstLimit": 10,
+                            "throttlingRateLimit": 5
+                          }
+                        ],
+                        "restApiId": {
+                          "Ref": "ChatApiD29796E1"
+                        },
+                        "stageName": "prod"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnStage",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Stage",
+                  "version": "2.170.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "GenAIDevStack/ChatApi/Endpoint",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.170.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "GenAIDevStack/ChatApi/Default",
+                "children": {
+                  "chat": {
+                    "id": "chat",
+                    "path": "GenAIDevStack/ChatApi/Default/chat",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "GenAIDevStack/ChatApi/Default/chat/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "ChatApiD29796E1",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "chat",
+                            "restApiId": {
+                              "Ref": "ChatApiD29796E1"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.170.0"
+                        }
+                      },
+                      "POST": {
+                        "id": "POST",
+                        "path": "GenAIDevStack/ChatApi/Default/chat/POST",
+                        "children": {
+                          "ApiPermission.GenAIDevStackChatApi78D7F4CD.POST..chat": {
+                            "id": "ApiPermission.GenAIDevStackChatApi78D7F4CD.POST..chat",
+                            "path": "GenAIDevStack/ChatApi/Default/chat/POST/ApiPermission.GenAIDevStackChatApi78D7F4CD.POST..chat",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "ChatHandlerFunctionE48F1BBB",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:us-east-1:654654333266:",
+                                      {
+                                        "Ref": "ChatApiD29796E1"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "ChatApiDeploymentStageprodE9C01931"
+                                      },
+                                      "/POST/chat"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.170.0"
+                            }
+                          },
+                          "ApiPermission.Test.GenAIDevStackChatApi78D7F4CD.POST..chat": {
+                            "id": "ApiPermission.Test.GenAIDevStackChatApi78D7F4CD.POST..chat",
+                            "path": "GenAIDevStack/ChatApi/Default/chat/POST/ApiPermission.Test.GenAIDevStackChatApi78D7F4CD.POST..chat",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "ChatHandlerFunctionE48F1BBB",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:us-east-1:654654333266:",
+                                      {
+                                        "Ref": "ChatApiD29796E1"
+                                      },
+                                      "/test-invoke-stage/POST/chat"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.170.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "GenAIDevStack/ChatApi/Default/chat/POST/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "authorizationType": "NONE",
+                                "httpMethod": "POST",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "ChatHandlerFunctionE48F1BBB",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                },
+                                "resourceId": {
+                                  "Ref": "ChatApichatFDA23F51"
+                                },
+                                "restApiId": {
+                                  "Ref": "ChatApiD29796E1"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.170.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.170.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.ResourceBase",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_apigateway.LambdaRestApi",
+              "version": "2.170.0"
+            }
+          },
+          "GenAIDevUser": {
+            "id": "GenAIDevUser",
+            "path": "GenAIDevStack/GenAIDevUser",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GenAIDevStack/GenAIDevUser/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::User",
+                  "aws:cdk:cloudformation:props": {
+                    "userName": "genai-dev"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnUser",
+                  "version": "2.170.0"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "GenAIDevStack/GenAIDevUser/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GenAIDevStack/GenAIDevUser/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "bedrock:Converse",
+                                "bedrock:ConverseStream",
+                                "bedrock:CountTokens",
+                                "bedrock:GetFoundationModel",
+                                "bedrock:InvokeModel",
+                                "bedrock:InvokeModelWithResponseStream",
+                                "bedrock:ListFoundationModels"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "*",
+                              "Sid": "BedrockDevAccess"
+                            },
+                            {
+                              "Action": [
+                                "ce:GetCostAndUsage",
+                                "cloudwatch:GetMetricData",
+                                "cloudwatch:GetMetricStatistics",
+                                "cloudwatch:PutMetricData"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "*",
+                              "Sid": "CostTrackerMetrics"
+                            },
+                            {
+                              "Action": [
+                                "s3:Abort*",
+                                "s3:DeleteObject*",
+                                "s3:GetBucket*",
+                                "s3:GetObject*",
+                                "s3:List*",
+                                "s3:PutObject",
+                                "s3:PutObjectLegalHold",
+                                "s3:PutObjectRetention",
+                                "s3:PutObjectTagging",
+                                "s3:PutObjectVersionTagging"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "ChatHistoryBucketAFDDB459",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "ChatHistoryBucketAFDDB459",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "GenAIDevUserDefaultPolicy50F41767",
+                        "users": [
+                          {
+                            "Ref": "GenAIDevUser8FD4C7C2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.User",
+              "version": "2.170.0"
+            }
+          },
+          "MonthlyGenAIBudget": {
+            "id": "MonthlyGenAIBudget",
+            "path": "GenAIDevStack/MonthlyGenAIBudget",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Budgets::Budget",
+              "aws:cdk:cloudformation:props": {
+                "budget": {
+                  "budgetType": "COST",
+                  "timeUnit": "MONTHLY",
+                  "budgetLimit": {
+                    "amount": 10,
+                    "unit": "USD"
+                  },
+                  "budgetName": "genai-dev-monthly-budget"
+                },
+                "notificationsWithSubscribers": [
+                  {
+                    "notification": {
+                      "comparisonOperator": "GREATER_THAN",
+                      "notificationType": "FORECASTED",
+                      "threshold": 80,
+                      "thresholdType": "PERCENTAGE"
+                    },
+                    "subscribers": [
+                      {
+                        "address": "sandakebalde89@gmail.com",
+                        "subscriptionType": "EMAIL"
+                      }
+                    ]
+                  },
+                  {
+                    "notification": {
+                      "comparisonOperator": "GREATER_THAN",
+                      "notificationType": "ACTUAL",
+                      "threshold": 100,
+                      "thresholdType": "PERCENTAGE"
+                    },
+                    "subscribers": [
+                      {
+                        "address": "sandakebalde89@gmail.com",
+                        "subscriptionType": "EMAIL"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_budgets.CfnBudget",
+              "version": "2.170.0"
+            }
+          },
+          "ChatApiUrl": {
+            "id": "ChatApiUrl",
+            "path": "GenAIDevStack/ChatApiUrl",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.170.0"
+            }
+          },
+          "ChatHistoryBucketName": {
+            "id": "ChatHistoryBucketName",
+            "path": "GenAIDevStack/ChatHistoryBucketName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.170.0"
+            }
+          },
+          "GenAIDevUserName": {
+            "id": "GenAIDevUserName",
+            "path": "GenAIDevStack/GenAIDevUserName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.170.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "GenAIDevStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "GenAIDevStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.8.1"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "GenAIDevStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.170.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "GenAIDevStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.170.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.170.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.8.1"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.170.0"
+    }
+  }
+}
