@@ -1,3 +1,4 @@
+<img width="2688" height="2270" alt="arch-pic" src="https://github.com/user-attachments/assets/69e4b7f8-afac-48d2-8cfe-1febb3b159b9" />
 # Episode 1 — I Built My Own AI Assistant for Free
 
 Hands-on lab code for the `genai-dev-tv` YouTube series, Episode 1. Universal-audience video,
